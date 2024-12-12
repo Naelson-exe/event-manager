@@ -46,18 +46,38 @@ end
 
 def get_hours(regdate)
   DateTime.strptime(regdate, '%m/%d/%y %H:%M').strftime('%k').to_i
-rescue ArgumentError
-    puts "Invalid argument"
+rescue ArgumentError => e 
+  puts "Invalid registration date format: #{e.message}"
+  nil
 end
 
 def get_days(regdate)
   DateTime.strptime(regdate, '%m/%d/%y %H:%M').wday
-rescue ArgumentError
-  puts "Invalid argument"
+rescue ArgumentError => e 
+  puts "Invalid registration date format: #{e.message}"
+  nil
 end
 
-# def calculate_peak_hour(hours)
-# end
+def calculate_peak_hours(hours)
+  freq = hours.compact.tally 
+  freq = freq.sort_by { |_key, value| -value }.to_h
+  peak_hours = freq.keys.first(3) 
+  puts "The peak registration hours were #{peak_hours[0]} o'clock, #{peak_hours[1]} o'clock and #{peak_hours[2]} o'clock"
+end
+
+def weekday(wday)
+  days_of_week = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+  days_of_week[wday]
+end
+
+def calculate_peak_days(days)
+  freq = days.compact.tally 
+  freq = freq.sort_by { |_key, value| -value }.to_h
+  peak_days = freq.keys.first(3) 
+  
+  peak_days = peak_days.map { |wday| weekday(wday) }
+  puts "The peak registration days were on #{peak_days[0]}, #{peak_days[1]} and #{peak_days[2]}"
+end
 
 puts 'EventManager initialized.'
 
@@ -85,3 +105,6 @@ contents.each do |row|
 
   save_thank_you_letter(id,form_letter)
 end
+
+calculate_peak_hours(hours)
+calculate_peak_days(days)
