@@ -62,7 +62,7 @@ def calculate_peak_hours(hours)
   freq = hours.compact.tally 
   freq = freq.sort_by { |_key, value| -value }.to_h
   peak_hours = freq.keys.first(3) 
-  puts "The peak registration hours were #{peak_hours[0]} o'clock, #{peak_hours[1]} o'clock and #{peak_hours[2]} o'clock"
+  puts "The peak registration hours were #{peak_hours[0]}:00, #{peak_hours[1]}:00 and #{peak_hours[2]}:00"
 end
 
 def weekday(wday)
